@@ -5,7 +5,7 @@ Exact structure out of any language model completion with regular expressions.
 
 Return specific syntactic structure (e.g. JSON or XML), or specific semantic structure (e.g. a date or a number), or even complete templates (e.g. a sentence with a blank to fill in).
 
-How does it work? For each token, ReLLM tests every possible completion against a partial regex. For the potential completions that do not match the pattern, ReLLM masks the logits so that the language model does not generate them.
+How does it work? ReLLM filters non-matching tokens pre-generation. For each token, ReLLM tests every possible completion against a partial regex. For the potential completions that do not match the pattern, ReLLM masks the logits so that the language model does not generate them.
 
 ### Installation
 ```
@@ -42,6 +42,8 @@ print(output)
 ## Examples using GPT2 (124 million parameters)
 
 #
+
+Using GPT2 (124m)
 
 **Prompt**: ReLLM, the best way to get structured data out of LLMs, is an acronym for
 
