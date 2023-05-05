@@ -1,6 +1,9 @@
 # ReLLM
 Regular Expressions for Language Model Completions.
 
+> *Some people, when confronted with a problem, think
+“I know, I'll use regular expressions.”   Now they have two problems.*
+
 Exact structure out of any language model completion with regular expressions.
 
 Return specific syntactic structure (e.g. JSON or XML), or specific semantic structure (e.g. a date or a number), or even complete templates (e.g. a sentence with a blank to fill in).
