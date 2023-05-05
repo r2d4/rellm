@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "rellm"
+version = "0.0.3"
+description = "Get exact structure out of any language models with regular expressions."
+authors = ["Matt Rickard <pypi@matt-rickard.com>"]
+maintainers = ["Matt Rickard <pypi@matt-rickard.com>"]
+readme = "README.md"
+license = "MIT"
+keywords = [
+  "llm",
+  "ai",
+  "prompt",
+  "large language models",
+  "gpt-3",
+  "chatgpt",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Linguistic",
+]
+urls = { repository = "https://github.com/r2d4/rellm" }
+
+[tool.poetry.dependencies]
+python = "^3.8"
+regex = "^2023.5.5"
+transformers = "^4.28.1"
+numpy = "^1.24.3"
+torch = "^2.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 119
