@@ -1,7 +1,7 @@
 # ReLLM
 Regular Expressions for Language Model Completions.
 
-Get exact structure out of any language model completion with regular expressions.
+Exact structure out of any language model completion with regular expressions.
 
 Return specific syntactic structure (e.g. JSON or XML), or specific semantic structure (e.g. a date or a number), or even complete templates (e.g. a sentence with a blank to fill in).
 
@@ -40,6 +40,17 @@ print(output)
 
 
 ## Examples using GPT2 (124 million parameters)
+
+#
+
+**Prompt**: ReLLM, the best way to get structured data out of LLMs, is an acronym for
+
+**Pattern**: Re[a-z]+ L[a-z]+ L[a-z]+ M[a-z]+
+
+**ReLLM**: Realized Logistic Logistics Model
+
+**Without ReLLM**: Largest Largest Address Space (MELSP), which has its roots in the  Internet network, at least when compared
+#
 
 **Prompt**: Return the first three letters of the alphabet in a json array:
 
@@ -102,13 +113,3 @@ Z-R
 **Without ReLLM**: iced coffee here on the west side and do this, so can you?"
 
 "Why, I don't understand. What did you mean by
-
-#
-
-**Prompt**: ReLLM, the best way to get structured data out of LLMs, is an acronym for
-
-**Patern**: Re[a-z]+ L[a-z]+ L[a-z]+ M[a-z]+
-
-**ReLLM**: Realized Logistic Logistics Model
-
-**Without ReLLM**: Largest Largest Address Space (MELSP), which has its roots in the  Internet network, at least when compared
