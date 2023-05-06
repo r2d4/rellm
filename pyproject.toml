@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rellm"
-version = "0.0.3"
+version = "0.0.5"
 description = "Get exact structure out of any language models with regular expressions."
 authors = ["Matt Rickard <pypi@matt-rickard.com>"]
 maintainers = ["Matt Rickard <pypi@matt-rickard.com>"]
