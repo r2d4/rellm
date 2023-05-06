@@ -1,3 +1,6 @@
+from concurrent.futures import ThreadPoolExecutor
+from typing import Dict, Set
+
 import numpy as np
 import regex
 from transformers import LogitsProcessor, PreTrainedModel, PreTrainedTokenizer
@@ -30,11 +33,13 @@ def complete_re(prompt:str, pattern: regex.Pattern, tokenizer: PreTrainedTokeniz
     partial_completion = ""
     prompt_plus_completion = prompt + partial_completion
 
+    token_validator = TokenValidator(tokenizer)
+
     while gen_tokens < max_new_tokens:
         prompt_token_ids = tokenizer.encode(prompt_plus_completion, return_tensors="pt")
         prompt_length = prompt_token_ids.shape[1]
 
-        allowed_token_ids = valid_next_tokens(partial_completion, pattern, tokenizer)
+        allowed_token_ids = token_validator.get_valid_next_tokens(partial_completion, pattern)
         custom_mask_processor = CustomLogitsMask(allowed_token_ids)
 
         output_ids = model.generate(prompt_token_ids,
@@ -55,17 +60,27 @@ def complete_re(prompt:str, pattern: regex.Pattern, tokenizer: PreTrainedTokeniz
         gen_tokens += 1
 
     return partial_completion
-        
-def valid_next_tokens(partial_completion: str,  
-                      pattern: regex.Pattern, 
-                      tokenizer: PreTrainedTokenizer):
-    """
-    Return a list of valid next tokens for a prompt.
-    """
-    valid_token_ids = set()
-    for _, token_id in tokenizer.get_vocab().items():
-        decoded_token = tokenizer.decode(token_id)
-        if pattern.match(partial_completion + decoded_token, partial=True):
-            valid_token_ids.add(token_id)
-    
-    return valid_token_ids
+
+class TokenValidator:
+    def __init__(self, tokenizer: PreTrainedTokenizer):
+        self.tokenizer = tokenizer
+        self.decoded_tokens_cache = self.build_decoded_tokens_cache(tokenizer)
+
+    @staticmethod
+    def build_decoded_tokens_cache(tokenizer: PreTrainedTokenizer) -> Dict[int, str]:
+        return {token_id: tokenizer.decode(token_id) for _, token_id in tokenizer.get_vocab().items()}
+
+    def is_valid_token(self, token_id: int, partial_completion: str, pattern: regex.Pattern) -> bool:
+        decoded_token = self.decoded_tokens_cache[token_id]
+        return pattern.match(partial_completion + decoded_token, partial=True)
+
+    def get_valid_next_tokens(self, partial_completion: str, pattern: regex.Pattern) -> Set[int]:
+        with ThreadPoolExecutor():
+            valid_token_ids = set(
+                filter(
+                    lambda token_id: self.is_valid_token(token_id, partial_completion, pattern),
+                    self.decoded_tokens_cache.keys()
+                )
+            )
+
+        return valid_token_ids
