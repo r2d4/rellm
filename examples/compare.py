@@ -1,8 +1,12 @@
+import sys
+from pathlib import Path
 
 import regex
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from rellm import complete_re
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
+from rellm import complete_re  # noqa: E402
 
 model = AutoModelForCausalLM.from_pretrained("gpt2")
 tokenizer = AutoTokenizer.from_pretrained("gpt2")
