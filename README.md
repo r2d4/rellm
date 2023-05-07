@@ -15,7 +15,7 @@ How does it work? ReLLM filters non-matching tokens pre-generation. For each tok
 pip install rellm
 ```
 
-The preliminary results are interesting -- even for small models, constraining the token space with ReLLM can improve the quality of the completions. Not to mention the ability to more easily parse the output programmatically. Take a look at some of the [examples](examples).
+The preliminary results are interesting -- even for small models, constraining the token space with ReLLM can improve the quality of the completions. Not to mention the ability to more easily parse the output programmatically. Take a look at some of the [examples](examples). For an example of parsing a context-free grammar (like JSON) with ReLLM, see [r2d4/parserllm](https://github.com/r2d4/parserllm).
 
 ```python
 import regex
