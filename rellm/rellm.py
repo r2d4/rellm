@@ -47,8 +47,9 @@ def complete_re(prompt:str, pattern: regex.Pattern | List[regex.Pattern], tokeni
 
         if stop_after_match:
             for p in pattern:
-                if p.fullmatch(partial_completion):
-                    return partial_completion
+                m = p.match(partial_completion)
+                if m and m.start() == 0:
+                    return m[0]
         gen_tokens += 1
 
     return partial_completion
