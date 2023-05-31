@@ -16,7 +16,7 @@ class ReTokenFilter:
 
     def is_valid_token(self, token_id: int, partial_completion: str, patterns: List[regex.Pattern]) -> bool:
         decoded_token = self.decoded_tokens_cache[token_id]
-        return any(pattern.fullmatch(partial_completion + decoded_token) for pattern in patterns)
+        return any(pattern.fullmatch(partial_completion + decoded_token, partial=True) for pattern in patterns)
 
     def filter_tokens(self, partial_completion: str, patterns: Union[regex.Pattern, List[regex.Pattern]]) -> Set[int]:
         if isinstance(patterns, regex.Pattern):
