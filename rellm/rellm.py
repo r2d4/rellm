@@ -32,7 +32,7 @@ def complete_re(prompt:str, pattern: regex.Pattern | List[regex.Pattern], tokeni
         allowed_token_ids = token_filter.filter_tokens(partial_completion, pattern)
         custom_mask_processor = LogitsMask(allowed_token_ids)
 
-        output_ids = model.generate(prompt_token_ids,
+        output_ids = model.generate(input_ids=prompt_token_ids,
                                     max_new_tokens=1,
                                     pad_token_id=tokenizer.eos_token_id,
                                     logits_processor=[custom_mask_processor],
