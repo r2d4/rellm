@@ -37,7 +37,7 @@ def complete_re(prompt:str, pattern: regex.Pattern | List[regex.Pattern], tokeni
                                     logits_processor=[custom_mask_processor],
                                     **model_kwargs
         )
-        new_token_ids = output_ids[0, prompt_length:]
+        new_token_ids = output_ids[0, prompt_length:].to("cpu")
         output_text = tokenizer.decode(new_token_ids, skip_special_tokens=True)
         partial_completion += output_text
         prompt_plus_completion = prompt_plus_completion + output_text
