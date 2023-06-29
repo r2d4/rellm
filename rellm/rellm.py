@@ -1,4 +1,3 @@
-
 from typing import List
 
 import regex
@@ -7,6 +6,7 @@ from transformers import PreTrainedModel, PreTrainedTokenizer
 from rellm.logits_mask import LogitsMask
 from rellm.re_token_filter import ReTokenFilter
 
+ESCAPED_CHARS = r"\.*+?{}()[]|^$"
 
 def complete_re(prompt:str, pattern: regex.Pattern | List[regex.Pattern], tokenizer: PreTrainedTokenizer, 
                 model: PreTrainedModel, max_new_tokens: int = 3, 
@@ -18,7 +18,10 @@ def complete_re(prompt:str, pattern: regex.Pattern | List[regex.Pattern], tokeni
     """
     if isinstance(pattern, regex.Pattern):
         pattern = [pattern]
-        
+
+    if len(pattern) == 1 and is_constant_regex(pattern[0].pattern):
+        return get_constant_regex_value(pattern[0].pattern)
+
     gen_tokens = 0
     partial_completion = ""
     prompt_plus_completion = prompt + partial_completion
@@ -53,3 +56,27 @@ def complete_re(prompt:str, pattern: regex.Pattern | List[regex.Pattern], tokeni
         gen_tokens += 1
 
     return partial_completion
+
+
+def get_constant_regex_value(pattern: str) -> str:
+    """
+    Get the value of a constant regex pattern.
+    """
+    for char in ESCAPED_CHARS:
+        pattern = pattern.replace("\\" + char, char)
+
+    return pattern
+
+
+def is_constant_regex(pattern: str) -> bool:
+    # Escaped characters to be considered when checking for a constant regex pattern
+
+    # remove all escaped characters that have actually been escaped with \ from the pattern
+    for char in ESCAPED_CHARS:
+        pattern = pattern.replace("\\" + char, "")
+
+    for char in ESCAPED_CHARS:
+        if char in pattern:
+            return False
+
+    return True
