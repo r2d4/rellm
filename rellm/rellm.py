@@ -1,4 +1,3 @@
-
 from typing import List
 
 import regex
@@ -8,8 +7,8 @@ from rellm.logits_mask import LogitsMask
 from rellm.re_token_filter import ReTokenFilter
 
 
-def complete_re(prompt:str, pattern: regex.Pattern | List[regex.Pattern], tokenizer: PreTrainedTokenizer, 
-                model: PreTrainedModel, max_new_tokens: int = 3, 
+def complete_re(prompt:str, pattern: regex.Pattern | List[regex.Pattern], tokenizer: PreTrainedTokenizer,
+                model: PreTrainedModel, max_new_tokens: int = 3,
                 stop_after_match: bool = True,
                 debug: bool = False,
                 **model_kwargs):
@@ -18,7 +17,7 @@ def complete_re(prompt:str, pattern: regex.Pattern | List[regex.Pattern], tokeni
     """
     if isinstance(pattern, regex.Pattern):
         pattern = [pattern]
-        
+
     gen_tokens = 0
     partial_completion = ""
     prompt_plus_completion = prompt + partial_completion
@@ -32,7 +31,7 @@ def complete_re(prompt:str, pattern: regex.Pattern | List[regex.Pattern], tokeni
         allowed_token_ids = token_filter.filter_tokens(partial_completion, pattern)
         custom_mask_processor = LogitsMask(allowed_token_ids)
 
-        output_ids = model.generate(input_ids=prompt_token_ids,
+        output_ids = model.generate(prompt_token_ids.to(model.device),
                                     max_new_tokens=1,
                                     pad_token_id=tokenizer.eos_token_id,
                                     logits_processor=[custom_mask_processor],
