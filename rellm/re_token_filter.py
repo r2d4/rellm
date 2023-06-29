@@ -16,7 +16,16 @@ class ReTokenFilter:
 
     def is_valid_token(self, token_id: int, partial_completion: str, patterns: List[regex.Pattern]) -> bool:
         decoded_token = self.decoded_tokens_cache[token_id]
-        return any(pattern.fullmatch(partial_completion + decoded_token, partial=True) for pattern in patterns)
+
+        # If the model is generating this token, it's likely trying to end the sequence or use some
+        # other special token.
+        # We only want to allow this token to be selected if the regex is already matched.
+        partial = decoded_token != ""
+
+        return any(
+            pattern.fullmatch(partial_completion + decoded_token, partial=partial)
+            for pattern in patterns
+        )
 
     def filter_tokens(self, partial_completion: str, patterns: Union[regex.Pattern, List[regex.Pattern]]) -> Set[int]:
         if isinstance(patterns, regex.Pattern):
