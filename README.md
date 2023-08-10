@@ -10,6 +10,8 @@ Return specific syntactic structure (e.g. JSON or XML), or specific semantic str
 
 How does it work? ReLLM filters non-matching tokens pre-generation. For each token, ReLLM tests every possible completion against a partial regex. For the potential completions that do not match the pattern, ReLLM masks the logits so that the language model does not generate them.
 
+*If you are looking for a hosted version of ReLLM, check out the Thiggle Regex Completion API at [github.com/thiggle/api](https://github.com/thiggle/api)*
+
 ### Installation
 ```
 pip install rellm
